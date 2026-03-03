@@ -1,22 +1,44 @@
-/* Calendar Container */
+/* Feel free to rewrite this file entirely to your liking. */
+
+/* Change border radii separately for each section */
+/* For easy colour changes, use these variables. */
+
+:root {
+  --primary-bg-color: rgb(255, 255, 255);
+  --primary-text-color: rgb(0, 0, 0);
+  --primary-border-color: rgb(0, 0, 0);
+  --secondary-bg-color: #ccc;
+  --primary-hover-bg-color: #eee;
+  --secondary-hover-bg-color: #333;
+  --accent-color: #f00;
+}
+
+
+/* Main container for the Pulecal calendar */
 .pulecal-calendar-container {
     margin-top: 10px;
 }
+
+/* Navigation bar: Contains Previous/Next buttons and the Month Title */
 .calendar-nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
+
+/* Navigation buttons (e.g., << PREVIOUS and NEXT >>) */
 .calendar-nav-btn {
-    background: #fff;
-    color: #000;
+    background: var(--primary-bg-color);
+    color: var(--primary-text-color);
     font-weight: 800;
     padding: 5px 10px;
-    border: 1px solid #000;
+    border: 1px solid var(--primary-border-color);
     font-size: 0.7rem;
     cursor: pointer;
 }
+
+/* Month and Year display (e.g., MARCH 2026) */
 .calendar-title {
     font-weight: 800;
     text-transform: uppercase;
@@ -24,93 +46,121 @@
     letter-spacing: 1px;
 }
 
-/* Calendar Grid Styles */
+/* --- Calendar Grid --- */
+
+/* The 7-column grid for days of the week and dates */
 .calendar-grid {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 5px;
-    background: #000;
-    border: 2px solid #000;
+    background: var(--primary-text-color);
+    border: 2px solid var(--primary-border-color);
     margin-top: 10px;
 }
+
+/* Headers for days of the week (Sun, Mon, etc.) */
 .calendar-header-day {
-    background: #000;
-    color: #fff;
+    background: var(--primary-text-color);
+    color: var(--primary-bg-color);
     text-align: center;
     padding: 10px 0;
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
 }
+
+/* Individual date square */
 .calendar-day {
-    background: #fff;
+    background: var(--primary-bg-color);
     aspect-ratio: 1 / 1;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-decoration: none;
-    color: #000;
+    color: var(--primary-text-color);
     font-weight: 700;
     position: relative;
     transition: all 0.2s;
 }
+
+/* Filler days for months starting later in the week */
 .calendar-day.empty {
-    background: #f0f0f0;
+    background: var(--secondary-bg-color);
     cursor: default;
 }
+
+/* Dates that have at least one booking slot available */
 .calendar-day.has-slots {
     cursor: pointer;
 }
 .calendar-day.has-slots:hover {
-    background: #eee;
+    background: var(--primary-hover-bg-color);
 }
+
+/* The currently active/selected date square */
 .calendar-day.selected {
-    background: #000;
-    color: #fff;
+    background: var(--primary-text-color);
+    color: var(--primary-bg-color);
 }
+
+/* Disabled dates with no available slots */
 .calendar-day.no-slots {
-    color: #ccc;
+    color: var(--secondary-bg-color);
     cursor: not-allowed;
 }
+
+/* Visual indicator (red dot) shown on dates with available slots */
 .calendar-dot {
     width: 4px;
     height: 4px;
-    background: #ff0000;
+    background: var(--accent-color);
     border-radius: 50%;
     position: absolute;
     bottom: 5px;
 }
+
+/* Changes the dot color to white when the day square is selected (black background) */
 .calendar-day.selected .calendar-dot {
-    background: #fff;
+    background: var(--primary-bg-color);
 }
 
-/* Slot Selection Styles */
+/* --- Time Slot Selection (Shown after picking a date) --- */
+
+/* The grid where time buttons (09:00, 10:00) are displayed */
 #slots-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-top: 10px;
 }
+
+/* Container for the hidden radio input and the visible box */
 .slot-radio {
     position: relative;
 }
+
+/* The styleable button-like box for a time slot */
 .slot-box {
     padding: 12px;
-    border: 2px solid #000;
+    border: 2px solid var(--primary-border-color);
     text-align: center;
     cursor: pointer;
     font-size: 0.85rem;
     font-weight: 700;
     transition: all 0.1s;
 }
+
+/* State when the user clicks/selects a time slot */
 .slot-radio input:checked + .slot-box {
-    background: #000;
-    color: #fff;
+    background: var(--primary-text-color);
+    color: var(--primary-bg-color);
 }
+
 .slot-box:hover {
-    background: #eee;
+    background: var(--primary-hover-bg-color);
 }
+
 .slot-radio input:checked + .slot-box:hover {
-    background: #333;
+    background: var(--secondary-bg-color);
 }
