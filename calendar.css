@@ -1,0 +1,116 @@
+/* Calendar Container */
+.pulecal-calendar-container {
+    margin-top: 10px;
+}
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.calendar-nav-btn {
+    background: #fff;
+    color: #000;
+    font-weight: 800;
+    padding: 5px 10px;
+    border: 1px solid #000;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+.calendar-title {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+/* Calendar Grid Styles */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    background: #000;
+    border: 2px solid #000;
+    margin-top: 10px;
+}
+.calendar-header-day {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.calendar-day {
+    background: #fff;
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #000;
+    font-weight: 700;
+    position: relative;
+    transition: all 0.2s;
+}
+.calendar-day.empty {
+    background: #f0f0f0;
+    cursor: default;
+}
+.calendar-day.has-slots {
+    cursor: pointer;
+}
+.calendar-day.has-slots:hover {
+    background: #eee;
+}
+.calendar-day.selected {
+    background: #000;
+    color: #fff;
+}
+.calendar-day.no-slots {
+    color: #ccc;
+    cursor: not-allowed;
+}
+.calendar-dot {
+    width: 4px;
+    height: 4px;
+    background: #ff0000;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 5px;
+}
+.calendar-day.selected .calendar-dot {
+    background: #fff;
+}
+
+/* Slot Selection Styles */
+#slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
+.slot-radio {
+    position: relative;
+}
+.slot-box {
+    padding: 12px;
+    border: 2px solid #000;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 700;
+    transition: all 0.1s;
+}
+.slot-radio input:checked + .slot-box {
+    background: #000;
+    color: #fff;
+}
+.slot-box:hover {
+    background: #eee;
+}
+.slot-radio input:checked + .slot-box:hover {
+    background: #333;
+}
