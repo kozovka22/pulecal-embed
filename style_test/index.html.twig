@@ -1,0 +1,164 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar Styles Preview{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('styles/default.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/pink.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/dark.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/teal.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/warm.css') }}">
+    <link rel="stylesheet" href="{{ asset('styles/blue.css') }}">
+    <style>
+        .style-preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 40px;
+            padding: 20px;
+        }
+        .style-section {
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .style-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <h1>Calendar Style Gallery</h1>
+    <div class="style-preview-container">
+        {% for style in styles %}
+            <div class="style-section {{ style.class }}">
+                <h2 class="style-title">{{ style.name }}</h2>
+                
+                <div class="pulecal-calendar-container" id="calendar-container-{{ loop.index }}">
+                    <div class="calendar-nav">
+                        <button type="button" onclick="changeMonth_{{ loop.index }}(-1)" class="calendar-nav-btn">&laquo; PŘEDCHOZÍ</button>
+                        <span id="calendar-title-{{ loop.index }}" class="calendar-title"></span>
+                        <button type="button" onclick="changeMonth_{{ loop.index }}(1)" class="calendar-nav-btn">DALŠÍ &raquo;</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid-{{ loop.index }}"></div>
+                </div>
+
+                <div id="slots-container-{{ loop.index }}" style="margin-top: 20px; display: none;">
+                    <h3 id="slots-label-{{ loop.index }}"></h3>
+                    <div id="slots-grid-{{ loop.index }}"></div>
+                </div>
+
+                <script>
+                    (function() {
+                        const bookedSlots = {{ slotsJson|raw }};
+                        const gridId = 'calendar-grid-{{ loop.index }}';
+                        const titleId = 'calendar-title-{{ loop.index }}';
+                        const slotsContainerId = 'slots-container-{{ loop.index }}';
+                        const slotsGridId = 'slots-grid-{{ loop.index }}';
+                        const slotsLabelId = 'slots-label-{{ loop.index }}';
+                        
+                        let currentMonth = new Date(2026, 2, 1); // March 2026
+                        let selectedDate = null;
+
+                        const monthNamesCze = [
+                            'Leden', 'Únor', 'Březen', 'Duben', 'Květen', 'Červen', 
+                            'Červenec', 'Srpen', 'Září', 'Říjen', 'Listopad', 'Prosinec'
+                        ];
+
+                        window['renderCalendar_{{ loop.index }}'] = function() {
+                            const grid = document.getElementById(gridId);
+                            const title = document.getElementById(titleId);
+                            if (!grid || !title) return;
+                            
+                            grid.innerHTML = '';
+                            
+                            ['Po', 'Út', 'St', 'Čt', 'Pá', 'So', 'Ne'].forEach(day => {
+                                const div = document.createElement('div');
+                                div.className = 'calendar-header-day';
+                                div.innerText = day;
+                                grid.appendChild(div);
+                            });
+
+                            title.innerText = `${monthNamesCze[currentMonth.getMonth()]} ${currentMonth.getFullYear()}`;
+
+                            const firstDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1);
+                            const lastDay = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0);
+                            
+                            let startDay = firstDay.getDay(); 
+                            let paddingDays = (startDay === 0) ? 6 : startDay - 1;
+
+                            for (let i = 0; i < paddingDays; i++) {
+                                const div = document.createElement('div');
+                                div.className = 'calendar-day empty';
+                                grid.appendChild(div);
+                            }
+
+                            for (let d = 1; d <= lastDay.getDate(); d++) {
+                                const y = currentMonth.getFullYear();
+                                const m = String(currentMonth.getMonth() + 1).padStart(2, '0');
+                                const dayD = String(d).padStart(2, '0');
+                                const dateStr = `${y}-${m}-${dayD}`;
+
+                                const hasSlots = bookedSlots[dateStr] && bookedSlots[dateStr].length > 0;
+                                
+                                const dayEl = document.createElement('div');
+                                dayEl.className = `calendar-day ${hasSlots ? 'has-slots' : 'no-slots'} ${selectedDate === dateStr ? 'selected' : ''}`;
+                                dayEl.innerText = d;
+                                
+                                if (hasSlots) {
+                                    const dot = document.createElement('div');
+                                    dot.className = 'calendar-dot';
+                                    dayEl.appendChild(dot);
+                                    dayEl.onclick = () => window['selectDate_{{ loop.index }}'](dateStr);
+                                }
+                                
+                                grid.appendChild(dayEl);
+                            }
+                        };
+
+                        window['selectDate_{{ loop.index }}'] = function(dateStr) {
+                            selectedDate = dateStr;
+                            window['renderCalendar_{{ loop.index }}']();
+                            
+                            const container = document.getElementById(slotsContainerId);
+                            const grid = document.getElementById(slotsGridId);
+                            const label = document.getElementById(slotsLabelId);
+                            
+                            if (container) container.style.display = 'block';
+                            if (label) label.innerText = `Zvolte čas (${new Date(dateStr).toLocaleDateString('cs-CZ')})`;
+                            if (grid) {
+                                grid.innerHTML = '';
+                                bookedSlots[dateStr].forEach(slot => {
+                                    const labelEl = document.createElement('label');
+                                    labelEl.className = 'slot-radio';
+                                    
+                                    labelEl.innerHTML = `
+                                        <input type="radio" name="slot_{{ loop.index }}" value="${slot.ids.join(',')}" required style="position: absolute; opacity: 0;">
+                                        <div class="slot-box">
+                                            ${slot.time}
+                                        </div>
+                                    `;
+                                    grid.appendChild(labelEl);
+                                });
+                            }
+                        };
+
+                        window['changeMonth_{{ loop.index }}'] = function(delta) {
+                            currentMonth.setMonth(currentMonth.getMonth() + delta);
+                            window['renderCalendar_{{ loop.index }}']();
+                        };
+
+                        window['renderCalendar_{{ loop.index }}']();
+                    })();
+                </script>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
