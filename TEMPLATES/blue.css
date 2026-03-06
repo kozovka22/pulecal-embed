@@ -1,0 +1,98 @@
+/* Blue Style */
+.pulecal-style-blue {
+  --primary-bg-color: #e8eaf6;
+  --primary-text-color: #1a237e;
+  --primary-border-color: #3f51b5;
+  --secondary-bg-color: #c5cae9;
+  --primary-hover-bg-color: #9fa8da;
+  --secondary-hover-bg-color: #283593;
+  --accent-color: #ff4081;
+}
+
+.pulecal-style-blue .calendar-nav-btn {
+    background: #fff;
+    color: var(--primary-text-color);
+    border: 1px solid var(--primary-border-color);
+}
+.pulecal-style-blue .calendar-title { color: var(--primary-text-color); }
+.pulecal-style-blue .calendar-grid {
+    background: #fdfdfd;
+    border: 1px solid #eee;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.pulecal-style-blue .calendar-header-day {
+    background: #f8f9fa;
+    color: #666;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-bottom: 1px solid #eee;
+}
+.pulecal-style-blue .calendar-day {
+    background: #fff;
+    color: #333;
+    aspect-ratio: 1.5 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-weight: 500;
+    position: relative;
+    border: none;
+    font-size: 0.9rem;
+}
+.pulecal-style-blue .calendar-day.empty { background: #fafafa; }
+.pulecal-style-blue .calendar-day:hover:not(.empty) {
+    background: #f0f7ff;
+    color: var(--primary-text-color);
+}
+.pulecal-style-blue .calendar-day.selected {
+    background: var(--primary-text-color);
+    color: #fff;
+    font-weight: 700;
+}
+.pulecal-style-blue .slot-box { 
+    border: 1px solid #ddd; 
+    padding: 8px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border-radius: 4px;
+    background: #fff;
+}
+.pulecal-style-blue .slot-radio input:checked + .slot-box {
+    background: var(--primary-text-color);
+    color: #fff;
+    border-color: var(--primary-text-color);
+}
+.pulecal-style-blue .calendar-dot {
+    width: 6px;
+    height: 6px;
+    background: #4caf50;
+    bottom: 4px;
+}
+.pulecal-style-blue .slot-radio input:checked + .slot-box {
+    background: var(--primary-text-color);
+    color: #fff;
+}
+.pulecal-style-blue .calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pulecal-style-blue #slots-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-top: 10px;
+}
